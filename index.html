@@ -151,6 +151,16 @@ h2{font-family:'Great Vibes',cursive;font-weight:400;font-size:min(6.4cqh,13cqw)
 
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(90px);background:var(--red-d);color:var(--gold-l);padding:12px 22px;font-size:13px;transition:transform .4s,visibility .4s;visibility:hidden;z-index:70;border:1px solid var(--gold);border-radius:2px}
 .toast.show{transform:translateX(-50%) translateY(0);visibility:visible}
+
+/* music */
+#musicBtn{position:fixed;right:16px;bottom:16px;z-index:65;width:48px;height:48px;border-radius:50%;border:1px solid var(--gold);cursor:pointer;
+  background:radial-gradient(circle at 35% 30%,#b51c27,#5c0810);color:var(--gold-l);display:none;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+#musicBtn.show{display:flex}
+#musicBtn svg{width:22px;height:22px}
+#musicBtn .off{display:none}
+#musicBtn.muted .on{display:none}#musicBtn.muted .off{display:block}
+#musicBtn:not(.muted)::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1px solid rgba(236,212,154,.5);animation:ring 2s infinite}
+@keyframes ring{0%{transform:scale(.9);opacity:1}100%{transform:scale(1.25);opacity:0}}
 </style>
 </head>
 <body class="locked">
@@ -289,6 +299,11 @@ h2{font-family:'Great Vibes',cursive;font-weight:400;font-size:min(6.4cqh,13cqw)
 </div></div></section>
 </main>
 
+<audio id="bgm" src="music/bgm.mp3" loop preload="auto"></audio>
+<button id="musicBtn" aria-label="Music on/off">
+  <svg class="on" viewBox="0 0 24 24" fill="currentColor"><path d="M9 18.5a2.5 2.5 0 1 1-2.5-2.5c.36 0 .7.08 1 .21V5.5l11-2.5v12.5a2.5 2.5 0 1 1-2.5-2.5c.36 0 .7.08 1 .21V6.6L9 8.4z"/></svg>
+  <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18V8l9-2v9" /><circle cx="6.5" cy="18" r="2.5"/><circle cx="15.5" cy="15" r="2.5"/><path d="M3 3l18 18"/></svg>
+</button>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -364,6 +379,14 @@ document.getElementById('copyBtn').addEventListener('click',async()=>{
   const txt="Sheshadri & Neha — Wedding\nReception: Sat, 12 Dec 2026\nMuhurtham: Sun, 13 Dec 2026\nVenue: Gokul Function Hall\nMap: https://share.google/Uamf2OG2aSIseTsSb";
   try{await navigator.clipboard.writeText(txt);toast('Details copied')}catch(e){toast('Copy not available here')}
 });
+
+/* Music */
+const bgm=document.getElementById('bgm'),mBtn=document.getElementById('musicBtn');let wantMusic=true;
+function fadeTo(v,ms){const s=bgm.volume,t0=performance.now();(function f(n){const k=Math.min(1,(n-t0)/ms);bgm.volume=s+(v-s)*k;if(k<1)requestAnimationFrame(f)})(t0)}
+function playMusic(){bgm.volume=0;const p=bgm.play();if(p)p.then(()=>{fadeTo(.6,2500);mBtn.classList.remove('muted')}).catch(()=>mBtn.classList.add('muted'))}
+document.getElementById('seal').addEventListener('click',()=>{playMusic();setTimeout(()=>mBtn.classList.add('show'),2500)});
+mBtn.addEventListener('click',()=>{if(bgm.paused){wantMusic=true;playMusic()}else{wantMusic=false;bgm.pause();mBtn.classList.add('muted')}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){bgm.pause()}else if(wantMusic&&env.classList.contains('done')){bgm.play().catch(()=>{})}});
 </script>
 </body>
 </html>
