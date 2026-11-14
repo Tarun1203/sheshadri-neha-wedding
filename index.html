@@ -646,6 +646,7 @@ body.opened #tourBtn{display:flex}
   <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18V8l9-2v9" /><circle cx="6.5" cy="18" r="2.5"/><circle cx="15.5" cy="15" r="2.5"/><path d="M3 3l18 18"/></svg>
 </button>
 <button id="tourBtn" aria-label="Auto play"><svg class="pl" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg><svg class="pa" viewBox="0 0 24 24" fill="currentColor"><rect x="6.5" y="5" width="4" height="14" rx="1"/><rect x="13.5" y="5" width="4" height="14" rx="1"/></svg><span>Auto play</span></button>
+<video id="keepAwake" src="media/keepawake.mp4" muted playsinline loop preload="auto" aria-hidden="true" style="position:fixed;left:0;bottom:0;width:1px;height:1px;opacity:.01;pointer-events:none;z-index:-1"></video>
 <div class="toast" id="toast"></div>
 
 <script src="js/lenis.min.js"></script>
@@ -847,8 +848,16 @@ lb.addEventListener('touchend',e=>{if(sx===null)return;const dx=e.changedTouches
 (function(){
   const btn=document.getElementById('tourBtn'), label=btn.querySelector('span');
   const STOPS=[['home',4500],['couple',5500],['date',4500],['events',6000],['gallery',0],['venue',4500],['thanks',3500],['join',4500]];
-  let idx=0, timer=null, tick=null, t0=0, dur=0, ignoreUntil=0;
+  let idx=0, timer=null, tick=null, t0=0, dur=0, ignoreUntil=0, graceUntil=0, suspended=false, lock=null;
   window.touring=false;
+  const vid=document.getElementById('keepAwake');
+  async function awake(on){
+    try{
+      if(on){ if('wakeLock' in navigator && !lock){ lock=await navigator.wakeLock.request('screen'); lock.addEventListener('release',()=>{lock=null}) } }
+      else if(lock){ await lock.release(); lock=null }
+    }catch(e){}
+    try{ if(on){ const p=vid.play(); if(p)p.catch(()=>{}) } else vid.pause() }catch(e){}
+  }
   function progress(){if(!dur)return;btn.style.setProperty('--tp',Math.min(100,(Date.now()-t0)/dur*100)+'%')}
   function scrollToId(id){const el=document.getElementById(id);ignoreUntil=Date.now()+2600;
     if(lenis)lenis.scrollTo(el,{duration:2.2,easing:t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2});else el.scrollIntoView({behavior:'smooth'})}
@@ -867,17 +876,31 @@ lb.addEventListener('touchend',e=>{if(sx===null)return;const dx=e.changedTouches
     if(typeof fromIdx==='number')idx=fromIdx; else{ // resume from nearest section
       const y=scrollY; let best=0; STOPS.forEach(([id],i)=>{const el=document.getElementById(id);if(el&&el.offsetTop<=y+innerHeight*.4)best=i}); idx=best+ (y<10?0:1);
       if(idx>=STOPS.length)idx=0; }
-    tick=setInterval(progress,250); step();
+    tick=setInterval(progress,250); awake(true); step();
   }
   function stop(finished){
-    window.touring=false; clearTimeout(timer); clearInterval(tick); btn.classList.remove('on');
+    window.touring=false; suspended=false; clearTimeout(timer); clearInterval(tick); awake(false); btn.classList.remove('on');
     label.textContent=finished?'Replay':'Auto play'; btn.style.setProperty('--tp','0%'); if(finished)idx=0;
   }
   window.startTour=()=>start(0);
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden){
+      if(window.touring){ suspended=true; window.touring=false; clearTimeout(timer); clearInterval(tick); idx=Math.max(0,idx-1) }
+    }else{
+      graceUntil=Date.now()+2500;
+      if(suspended){ suspended=false; setTimeout(()=>{ window.touring=false; start(idx) },700) }
+      else if(window.touring) awake(true);
+    }
+  });
   btn.addEventListener('click',()=>{ if(window.touring)stop(); else start(label.textContent==='Replay'?0:undefined) });
-  const userStop=()=>{ if(window.touring&&Date.now()>ignoreUntil-2400) stop() };
+  const userStop=()=>{ if(window.touring&&Date.now()>ignoreUntil-2400&&Date.now()>graceUntil) stop() };
   addEventListener('wheel',userStop,{passive:true});
-  addEventListener('touchstart',e=>{ if(window.touring&&!e.target.closest('#tourBtn,#musicBtn')) stop() },{passive:true});
+  let ty=null,tx=null;
+  addEventListener('touchstart',e=>{ty=e.touches[0].clientY;tx=e.touches[0].clientX},{passive:true});
+  addEventListener('touchmove',e=>{ if(!window.touring||ty===null||Date.now()<graceUntil)return;
+    const dy=Math.abs(e.touches[0].clientY-ty), dx=Math.abs(e.touches[0].clientX-tx);
+    if(dy>24&&dy>dx&&!e.target.closest('#cf')) stop() },{passive:true});
+  addEventListener('touchend',()=>{ty=tx=null},{passive:true});
   addEventListener('keydown',e=>{ if(['ArrowDown','ArrowUp','PageDown','PageUp',' ','Home','End'].includes(e.key)) userStop() });
   document.querySelectorAll('[data-t]').forEach(a=>a.addEventListener('click',()=>{ if(window.touring)stop() }));
 })();
