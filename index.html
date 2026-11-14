@@ -243,6 +243,25 @@ footer::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;b
 #musicBtn{bottom:max(16px,env(safe-area-inset-bottom))}
 .names .n,.person .pn,#env .who,.card .c2,.fmid .fn{font-family:'Parisienne',cursive}
 .names .n{font-size:min(6.4cqh,13cqw)}
+
+/* ===== events: 4 compact cards ===== */
+.evs{display:grid;grid-template-columns:1fr;gap:1.3cqh;margin-top:2cqh;width:min(54cqh,80cqw);align-items:stretch}
+.ev{width:auto;display:grid;grid-template-columns:min(7.6cqh,15cqw) 1fr;align-items:center;gap:min(1.8cqh,3.4cqw);padding:1.1cqh min(2cqh,4cqw);text-align:left;margin:0}
+.ev .ic3{width:100%;height:auto;margin:0}
+.ev .day{font-size:min(1.05cqh,2.2cqw);letter-spacing:.22em}
+.ev h3{font-size:min(3.6cqh,7.4cqw);margin:.1cqh 0 0;line-height:1.05}
+.ev .tm{font-family:'Cormorant Garamond',serif;font-size:min(1.9cqh,3.9cqw);color:var(--ink);line-height:1.25}
+.ev .tm b{color:var(--red);font-weight:600}
+.ev .pl{margin-top:.25cqh;font-size:min(1.02cqh,2.15cqw);letter-spacing:.1em}
+.venue .addr{font-family:'Cormorant Garamond',serif;font-size:min(2cqh,4.2cqw);color:var(--muted);margin-top:.4cqh}
+.venue .vn{line-height:1.15}
+@media (orientation:portrait){.ev-orn{display:none}}
+@media (orientation:landscape){
+  .evs{grid-template-columns:repeat(4,1fr);width:100%;gap:1.6cqh}
+  .ev{grid-template-columns:1fr;text-align:center;padding:1.8cqh 1.2cqh;justify-items:center}
+  .ev .ic3{width:min(7.4cqh,14cqw)}
+  .ev h3{font-size:min(3.4cqh,6cqw)}
+}
 </style>
 </head>
 <body class="locked">
@@ -315,6 +334,39 @@ footer::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;b
       <path d="M37 33c2-4 5-4 6 0l3 7c1 2 0 3-2 5 2 5 6 9 11 11 2-2 3-3 5-2l7 3c4 1 4 4 0 6-4 3-9 4-15 1-9-4-15-10-19-19-2-5-1-9 4-12z" fill="#fff"/>
       <ellipse cx="38" cy="22" rx="16" ry="7" fill="url(#g3shine)" opacity=".75" transform="rotate(-20 38 22)"/>
     </symbol>
+
+    <radialGradient id="g3flame" cx=".5" cy=".75" r=".75"><stop offset="0" stop-color="#fff7c2"/><stop offset=".35" stop-color="#ffc83a"/><stop offset=".75" stop-color="#f06a12"/><stop offset="1" stop-color="#b8260a"/></radialGradient>
+    <linearGradient id="g3brick" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e2653f"/><stop offset="1" stop-color="#8c2a14"/></linearGradient>
+    <linearGradient id="g3gem" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#bfe6ff"/><stop offset="1" stop-color="#6aa7d8"/></linearGradient>
+    <symbol id="i-diya" viewBox="0 0 100 100">
+      <ellipse cx="50" cy="92" rx="30" ry="4" fill="#5a0a0a" opacity=".25"/>
+      <circle cx="50" cy="32" r="22" fill="#ffd36b" opacity=".25"/>
+      <path d="M50 8c-9 12-12 20-8 28 2 4 6 6 8 6s6-2 8-6c4-8 1-16-8-28z" fill="url(#g3flame)"/>
+      <path d="M50 22c-4 6-5 10-3 14 1 2 2 3 3 3s2-1 3-3c2-4 1-8-3-14z" fill="#fffbe0"/>
+      <path d="M12 56h76c-2 18-18 30-38 30S14 74 12 56z" fill="url(#g3gold)"/>
+      <ellipse cx="50" cy="56" rx="38" ry="8" fill="#e8b84f"/><ellipse cx="50" cy="56" rx="30" ry="5" fill="#8a5a14"/>
+      <path d="M78 52l14-8-4 12z" fill="url(#g3gold)"/>
+      <ellipse cx="32" cy="66" rx="10" ry="4" fill="url(#g3shine)" opacity=".7"/>
+    </symbol>
+    <symbol id="i-rings" viewBox="0 0 100 100">
+      <ellipse cx="50" cy="92" rx="30" ry="4" fill="#5a0a0a" opacity=".25"/>
+      <circle cx="38" cy="60" r="21" fill="none" stroke="url(#g3gold)" stroke-width="9"/>
+      <circle cx="62" cy="60" r="21" fill="none" stroke="url(#g3gold)" stroke-width="9"/>
+      <path d="M48 42a21 21 0 0 1 8 7" stroke="#b8892c" stroke-width="9" fill="none"/>
+      <path d="M54 30l8-10 8 10-8 10z" fill="url(#g3gem)" stroke="#5a8fc0" stroke-width="1"/>
+      <path d="M56 37l6-8" stroke="#fff" stroke-width="2"/>
+      <path d="M24 50a18 18 0 0 1 10-8" stroke="#fff" stroke-opacity=".7" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-fire" viewBox="0 0 100 100">
+      <ellipse cx="50" cy="93" rx="34" ry="4" fill="#5a0a0a" opacity=".25"/>
+      <path d="M50 10c-12 14-16 24-10 34 2 3 5 5 10 5s8-2 10-5c6-10 2-20-10-34z" fill="url(#g3flame)"/>
+      <path d="M33 26c-6 10-6 18-1 24 2 2 5 3 8 3-6-6-7-15-7-27zM67 26c6 10 6 18 1 24-2 2-5 3-8 3 6-6 7-15 7-27z" fill="url(#g3flame)" opacity=".9"/>
+      <path d="M22 56h56l-4 10H26z" fill="url(#g3brick)"/>
+      <path d="M16 66h68l-4 10H20z" fill="url(#g3brick)"/>
+      <path d="M10 76h80l-3 12H13z" fill="url(#g3brick)"/>
+      <path d="M22 56h56M16 66h68M10 76h80" stroke="#f7c7a0" stroke-width="1.4"/>
+      <path d="M50 26c-4 6-5 11-2 16 1 1 1 2 2 2s1-1 2-2c3-5 2-10-2-16z" fill="#fffbe0"/>
+    </symbol>
   </defs>
 </svg>
 
@@ -384,17 +436,27 @@ footer::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;b
 <section class="page" id="events"><div class="sheet cream"><div class="content">
   <div class="eyebrow rv">The celebrations</div>
   <h2 class="rv">Wedding Events</h2>
-  <svg class="orn rv"><use href="#orn"/></svg>
+  <svg class="orn rv ev-orn"><use href="#orn"/></svg>
   <div class="evs rv">
-    <div class="ev tilt" style="margin-top:5cqh">
-      <svg class="i3d ic3" viewBox="0 0 100 100"><use href="#i-cheers"/></svg>
-      <div class="day">Day One · Saturday</div><h3>Reception</h3>
-      <div class="dt"><b>12</b> December 2026</div><div class="pl">Gokul Function Hall</div>
+    <div class="ev tilt">
+      <svg class="i3d ic3" viewBox="0 0 100 100"><use href="#i-diya"/></svg>
+      <div><div class="day">Saturday · 12 Dec 2026</div><h3>Devathakarya</h3>
+      <div class="tm">At the bridegroom's residence</div><div class="pl">Kanakanagara, Tumkur</div></div>
     </div>
-    <div class="ev tilt" style="margin-top:5cqh">
+    <div class="ev tilt">
+      <svg class="i3d ic3" viewBox="0 0 100 100"><use href="#i-rings"/></svg>
+      <div><div class="day">Saturday · 12 Dec 2026</div><h3>Reception</h3>
+      <div class="tm"><b>7:00 PM</b> onwards</div><div class="pl">Sai Gokula Kalyana Mantapa</div></div>
+    </div>
+    <div class="ev tilt">
+      <svg class="i3d ic3" viewBox="0 0 100 100"><use href="#i-fire"/></svg>
+      <div><div class="day">Sunday · 13 Dec 2026</div><h3>Upanayanam</h3>
+      <div class="tm"><b>6:58 AM – 7:35 AM</b></div><div class="pl">Sai Gokula Kalyana Mantapa</div></div>
+    </div>
+    <div class="ev tilt">
       <svg class="i3d ic3" viewBox="0 0 100 100"><use href="#i-kal"/></svg>
-      <div class="day">Day Two · Sunday</div><h3>Muhurtham</h3>
-      <div class="dt"><b>13</b> December 2026</div><div class="pl">Gokul Function Hall</div>
+      <div><div class="day">Sunday · 13 Dec 2026</div><h3>Muhurtham</h3>
+      <div class="tm"><b>8:22 AM</b> · Dhanur Lagna</div><div class="pl">Sai Gokula Kalyana Mantapa</div></div>
     </div>
   </div>
 </div></div></section>
@@ -414,7 +476,8 @@ footer::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;b
   <div class="venue tilt rv">
     <svg class="i3d ic3" viewBox="0 0 100 100"><use href="#i-pin"/></svg>
     <div class="eyebrow">12 &amp; 13 December 2026</div>
-    <div class="vn">Gokul Function Hall</div>
+    <div class="vn">Sai Gokula Kalyana Mantapa</div>
+    <div class="addr">Madhugiri Road, Yellapura, Tumkur</div>
     <div class="btns">
       <a class="btn" href="https://share.google/Uamf2OG2aSIseTsSb" target="_blank" rel="noopener">Directions</a>
       <button class="btn ghost" id="copyBtn">Copy details</button>
@@ -436,10 +499,10 @@ footer::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;b
   <h2 class="rv">We'd love to see you</h2>
   <p class="sub rv">Save the dates, find your way and share the joy with family and friends.</p>
   <div class="tiles">
-    <a class="tile rv" target="_blank" rel="noopener" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Sheshadri%20%26%20Neha%20Wedding&dates=20261212/20261214&location=Gokul%20Function%20Hall&details=Reception%20-%2012%20Dec%202026%0AMuhurtham%20-%2013%20Dec%202026">
+    <a class="tile rv" target="_blank" rel="noopener" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Sheshadri%20%26%20Neha%20Wedding&dates=20261212T133000Z/20261213T043000Z&location=Sai%20Gokula%20Kalyana%20Mantapa%2C%20Madhugiri%20Road%2C%20Yellapura%2C%20Tumkur&details=Devathakarya%20-%20Sat%2012%20Dec%2C%20bridegroom%27s%20residence%2C%20Kanakanagara%0AReception%20-%20Sat%2012%20Dec%2C%207%3A00%20PM%20onwards%0AUpanayanam%20-%20Sun%2013%20Dec%2C%206%3A58%20to%207%3A35%20AM%0AMuhurtham%20-%20Sun%2013%20Dec%2C%208%3A22%20AM">
       <svg class="i3d" viewBox="0 0 100 100"><use href="#i-cal"/></svg><b>Add to Calendar</b><span>12 &amp; 13 Dec 2026</span></a>
     <a class="tile rv" target="_blank" rel="noopener" href="https://share.google/Uamf2OG2aSIseTsSb">
-      <svg class="i3d" viewBox="0 0 100 100"><use href="#i-pin"/></svg><b>Get Directions</b><span>Gokul Function Hall</span></a>
+      <svg class="i3d" viewBox="0 0 100 100"><use href="#i-pin"/></svg><b>Get Directions</b><span>Yellapura, Tumkur</span></a>
     <a class="tile rv" id="waTile" target="_blank" rel="noopener" href="#">
       <svg class="i3d" viewBox="0 0 100 100"><use href="#i-chat"/></svg><b>Share on WhatsApp</b><span>Invite your family</span></a>
   </div>
@@ -450,7 +513,7 @@ footer::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;b
     <div class="fbadge">S<i></i>N</div>
     <div class="fmid">
       <div class="fn">Sheshadri &amp; Neha</div>
-      <div class="fd">12 · 13 December 2026 · Gokul Function Hall</div>
+      <div class="fd">12 · 13 December 2026 · Sai Gokula Kalyana Mantapa, Tumkur</div>
       <div class="flinks"><a data-t="home">Home</a><a data-t="couple">Couple</a><a data-t="events">Events</a><a data-t="gallery">Photos</a><a data-t="venue">Venue</a><a data-t="join">Share</a></div>
     </div>
     <button class="top" id="toTop" aria-label="Back to top">↑</button>
@@ -529,7 +592,7 @@ function burst(n){for(let i=0;i<n;i++)setTimeout(petal,i*50)}
   document.getElementById('grid').innerHTML=h;})();
 
 /* Countdown */
-const target=new Date('2026-12-12T00:00:00+05:30').getTime(),pad=n=>String(n).padStart(2,'0');
+const target=new Date('2026-12-13T08:22:00+05:30').getTime(),pad=n=>String(n).padStart(2,'0');
 function tick(){let d=Math.max(0,target-Date.now());const D=Math.floor(d/864e5);d%=864e5;const H=Math.floor(d/36e5);d%=36e5;
   [D,H,Math.floor(d/6e4),Math.floor(d%6e4/1e3)].forEach((v,i)=>document.getElementById('cd-'+'dhms'[i]).textContent=pad(v));}
 tick();setInterval(tick,1000);
@@ -537,7 +600,7 @@ tick();setInterval(tick,1000);
 /* Copy */
 function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200)}
 document.getElementById('copyBtn').addEventListener('click',async()=>{
-  const txt="Sheshadri & Neha — Wedding\nReception: Sat, 12 Dec 2026\nMuhurtham: Sun, 13 Dec 2026\nVenue: Gokul Function Hall\nMap: https://share.google/Uamf2OG2aSIseTsSb";
+  const txt="Sheshadri & Neha — Wedding\nDevathakarya: Sat 12 Dec, bridegroom's residence, Kanakanagara\nReception: Sat 12 Dec, 7:00 PM onwards\nUpanayanam: Sun 13 Dec, 6:58 – 7:35 AM\nMuhurtham: Sun 13 Dec, 8:22 AM\nVenue: Sai Gokula Kalyana Mantapa, Madhugiri Road, Yellapura, Tumkur\nMap: https://share.google/Uamf2OG2aSIseTsSb";
   try{await navigator.clipboard.writeText(txt);toast('Details copied')}catch(e){toast('Copy not available here')}
 });
 
@@ -615,7 +678,7 @@ if(matchMedia('(hover:hover)').matches && window.gsap){
 $$('.tile').forEach(t=>t.addEventListener('pointermove',e=>{const r=t.getBoundingClientRect();t.style.setProperty('--mx',e.clientX-r.left+'px');t.style.setProperty('--my',e.clientY-r.top+'px')}));
 
 // WhatsApp share
-const shareText="You're invited to the wedding of Sheshadri & Neha 💐\nReception: Sat, 12 Dec 2026\nMuhurtham: Sun, 13 Dec 2026\nVenue: Gokul Function Hall\nMap: https://share.google/Uamf2OG2aSIseTsSb";
+const shareText="You're invited to the wedding of Sheshadri & Neha 💐\nDevathakarya: Sat 12 Dec, bridegroom's residence, Kanakanagara\nReception: Sat 12 Dec, 7:00 PM onwards\nUpanayanam: Sun 13 Dec, 6:58 – 7:35 AM\nMuhurtham: Sun 13 Dec, 8:22 AM\nVenue: Sai Gokula Kalyana Mantapa, Madhugiri Road, Yellapura, Tumkur\nMap: https://share.google/Uamf2OG2aSIseTsSb";
 $('#waTile').href='https://wa.me/?text='+encodeURIComponent(shareText);
 
 // Lightbox gallery
