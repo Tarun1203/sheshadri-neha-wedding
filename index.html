@@ -6,7 +6,8 @@
 <title>Sheshadri & Neha · Wedding Invitation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Parisienne&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="img/temple-p.jpg">
+<link rel="preload" as="image" href="img/opening-first.jpg">
+<link rel="preload" as="video" href="media/opening.mp4" type="video/mp4">
 <link rel="preload" as="image" href="img/maroon-l.jpg" media="(orientation: landscape)">
 <link rel="stylesheet" href="js/lenis.css">
 <style>
@@ -350,6 +351,14 @@ body.opened #tourBtn{display:flex}
 #tourBtn.on span::after{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:#f6e1a2;margin-left:8px;vertical-align:middle;animation:blink 1.2s infinite}
 @keyframes blink{50%{opacity:.2}}
 #tourBtn::before{content:"";position:absolute;left:0;bottom:0;height:2px;border-radius:2px;background:linear-gradient(90deg,#f6e1a2,#c9a24b);width:var(--tp,0%);transition:width .25s linear}
+
+/* ===== opening: animated bells & petals video ===== */
+.temple{background-image:url(img/opening-first.jpg)!important;overflow:hidden}
+.openvid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none}
+#env .temple .content{z-index:1;--t:40%;--b:9%;--s:12%}
+#env .temple .to{max-width:62cqw;letter-spacing:.3em;line-height:1.5}
+#env .temple .who{max-width:66cqw}
+#env .temple .content>.to,#env .temple .content>.who{text-shadow:0 1px 0 rgba(255,250,235,.8),0 0 18px rgba(255,248,230,.9)}
 </style>
 </head>
 <body class="locked">
@@ -461,6 +470,7 @@ body.opened #tourBtn{display:flex}
 <!-- ============ 1. OPENING ============ -->
 <div id="env" class="page">
   <div class="sheet temple">
+    <video class="openvid" id="openVid" src="media/opening.mp4" poster="img/opening-first.jpg" autoplay muted playsinline preload="auto" aria-hidden="true"></video>
     <div class="content">
       <div class="to">You're invited to the wedding of</div>
       <div class="who">Sheshadri<br><span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.5em">&amp;</span> Neha</div>
@@ -903,6 +913,15 @@ lb.addEventListener('touchend',e=>{if(sx===null)return;const dx=e.changedTouches
   addEventListener('touchend',()=>{ty=tx=null},{passive:true});
   addEventListener('keydown',e=>{ if(['ArrowDown','ArrowUp','PageDown','PageUp',' ','Home','End'].includes(e.key)) userStop() });
   document.querySelectorAll('[data-t]').forEach(a=>a.addEventListener('click',()=>{ if(window.touring)stop() }));
+})();
+/* opening video: play intro once, then loop the gentle swinging part */
+(function(){const v=document.getElementById('openVid');if(!v)return;
+  const LOOP_FROM=4.2;
+  v.addEventListener('timeupdate',()=>{if(v.duration&&v.currentTime>v.duration-0.25){v.currentTime=LOOP_FROM;v.play().catch(()=>{})}});
+  v.addEventListener('ended',()=>{v.currentTime=LOOP_FROM;v.play().catch(()=>{})});
+  const kick=()=>{const p=v.play();if(p)p.catch(()=>{})};kick();document.addEventListener('touchstart',kick,{once:true,passive:true});
+  // stop decoding once the invitation is open
+  new MutationObserver(()=>{if(document.getElementById('env').classList.contains('done')){v.pause()}}).observe(document.getElementById('env'),{attributes:true,attributeFilter:['class']});
 })();
 </script>
 </body>
