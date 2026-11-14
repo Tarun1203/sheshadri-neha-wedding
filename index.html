@@ -338,6 +338,18 @@ footer::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;b
 #env.open .ribbon .rb-b{transform:translateY(140%) rotate(8deg);opacity:0;transition-delay:.25s}
 #env.open .paper{transition-delay:.55s}
 #env.open .roller.bot i,#env.open .roller.top i{animation-delay:.55s}
+
+/* ===== auto tour ===== */
+#tourBtn{position:fixed;left:16px;bottom:max(16px,env(safe-area-inset-bottom));z-index:65;height:48px;padding:0 18px 0 14px;border-radius:99px;border:1px solid var(--gold);
+  background:radial-gradient(circle at 35% 30%,#b51c27,#5c0810);color:var(--gold-l);display:none;align-items:center;gap:8px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.4);
+  font-family:'Jost';font-size:11px;letter-spacing:.16em;text-transform:uppercase}
+body.opened #tourBtn{display:flex}
+#tourBtn svg{width:18px;height:18px}
+#tourBtn .pa{display:none}
+#tourBtn.on .pa{display:block}#tourBtn.on .pl{display:none}
+#tourBtn.on span::after{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:#f6e1a2;margin-left:8px;vertical-align:middle;animation:blink 1.2s infinite}
+@keyframes blink{50%{opacity:.2}}
+#tourBtn::before{content:"";position:absolute;left:0;bottom:0;height:2px;border-radius:2px;background:linear-gradient(90deg,#f6e1a2,#c9a24b);width:var(--tp,0%);transition:width .25s linear}
 </style>
 </head>
 <body class="locked">
@@ -633,6 +645,7 @@ footer::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;b
   <svg class="on" viewBox="0 0 24 24" fill="currentColor"><path d="M9 18.5a2.5 2.5 0 1 1-2.5-2.5c.36 0 .7.08 1 .21V5.5l11-2.5v12.5a2.5 2.5 0 1 1-2.5-2.5c.36 0 .7.08 1 .21V6.6L9 8.4z"/></svg>
   <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18V8l9-2v9" /><circle cx="6.5" cy="18" r="2.5"/><circle cx="15.5" cy="15" r="2.5"/><path d="M3 3l18 18"/></svg>
 </button>
+<button id="tourBtn" aria-label="Auto play"><svg class="pl" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg><svg class="pa" viewBox="0 0 24 24" fill="currentColor"><rect x="6.5" y="5" width="4" height="14" rx="1"/><rect x="13.5" y="5" width="4" height="14" rx="1"/></svg><span>Auto play</span></button>
 <div class="toast" id="toast"></div>
 
 <script src="js/lenis.min.js"></script>
@@ -686,7 +699,7 @@ const env=document.getElementById('env');
 document.getElementById('seal').addEventListener('click',()=>{
   env.classList.add('open');
   setTimeout(()=>burst(30),2000);
-  setTimeout(()=>{env.classList.add('done');document.body.classList.remove('locked');document.body.classList.add('opened');if(window.lenis)lenis.start();if(window.ScrollTrigger)ScrollTrigger.refresh();},4100);
+  setTimeout(()=>{env.classList.add('done');document.body.classList.remove('locked');document.body.classList.add('opened');if(window.lenis)lenis.start();if(window.ScrollTrigger)ScrollTrigger.refresh();setTimeout(()=>window.startTour&&startTour(),1800);},4100);
 });
 const cols=['#e8962a','#f2b14a','#c8323a','#f6c86b','#fff3d6'];
 function petal(){
@@ -821,7 +834,7 @@ function hold(){pauseUntil=Date.now()+9000}
 document.querySelector('.cf-pv').onclick=()=>{hold();go(cur-1)};document.querySelector('.cf-nx').onclick=()=>{hold();go(cur+1)};
 let px=null;stage.addEventListener('pointerdown',e=>{px=e.clientX;hold()});
 stage.addEventListener('pointerup',e=>{if(px===null)return;const dx=e.clientX-px;swiped=Math.abs(dx)>40;if(swiped){go(cur+(dx<0?1:-1))}px=null});
-new IntersectionObserver(es=>es.forEach(e=>{clearInterval(auto);if(e.isIntersecting)auto=setInterval(()=>{if(Date.now()>pauseUntil&&!lb.classList.contains('show'))go(cur+1)},4200)}),{threshold:.5}).observe(document.getElementById('gallery'));
+new IntersectionObserver(es=>es.forEach(e=>{clearInterval(auto);if(e.isIntersecting)auto=setInterval(()=>{if(!window.touring&&Date.now()>pauseUntil&&!lb.classList.contains('show'))go(cur+1)},3200)}),{threshold:.5}).observe(document.getElementById('gallery'));
 addEventListener('resize',layout);layout();
 document.getElementById('heroArch').style.cursor='zoom-in';
 document.getElementById('heroArch').addEventListener('click',()=>lbOpen(0));
@@ -830,6 +843,44 @@ lb.addEventListener('click',e=>{if(e.target===lb)lbClose()});
 addEventListener('keydown',e=>{if(!lb.classList.contains('show'))return;if(e.key==='Escape')lbClose();if(e.key==='ArrowLeft')lbShow(li-1);if(e.key==='ArrowRight')lbShow(li+1)});
 let sx=null;lb.addEventListener('touchstart',e=>sx=e.touches[0].clientX,{passive:true});
 lb.addEventListener('touchend',e=>{if(sx===null)return;const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)lbShow(li+(dx<0?1:-1));sx=null});
+/* ===== Auto tour: pages + photos ===== */
+(function(){
+  const btn=document.getElementById('tourBtn'), label=btn.querySelector('span');
+  const STOPS=[['home',4500],['couple',5500],['date',4500],['events',6000],['gallery',0],['venue',4500],['thanks',3500],['join',4500]];
+  let idx=0, timer=null, tick=null, t0=0, dur=0, ignoreUntil=0;
+  window.touring=false;
+  function progress(){if(!dur)return;btn.style.setProperty('--tp',Math.min(100,(Date.now()-t0)/dur*100)+'%')}
+  function scrollToId(id){const el=document.getElementById(id);ignoreUntil=Date.now()+2600;
+    if(lenis)lenis.scrollTo(el,{duration:2.2,easing:t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2});else el.scrollIntoView({behavior:'smooth'})}
+  function step(){
+    if(!window.touring)return;
+    if(idx>=STOPS.length){stop(true);return}
+    const [id,wait]=STOPS[idx++]; scrollToId(id);
+    if(id==='gallery'){
+      const n=cfItems.length; let k=0; go(0);
+      const per=2300; dur=2400+per*n; t0=Date.now();
+      timer=setTimeout(function next(){ if(!window.touring)return; if(++k<n){go(k);timer=setTimeout(next,per)} else timer=setTimeout(step,900)},2400+per);
+    }else{dur=2400+wait;t0=Date.now();timer=setTimeout(step,2400+wait)}
+  }
+  function start(fromIdx){
+    if(window.touring)return; window.touring=true; btn.classList.add('on'); label.textContent='Playing';
+    if(typeof fromIdx==='number')idx=fromIdx; else{ // resume from nearest section
+      const y=scrollY; let best=0; STOPS.forEach(([id],i)=>{const el=document.getElementById(id);if(el&&el.offsetTop<=y+innerHeight*.4)best=i}); idx=best+ (y<10?0:1);
+      if(idx>=STOPS.length)idx=0; }
+    tick=setInterval(progress,250); step();
+  }
+  function stop(finished){
+    window.touring=false; clearTimeout(timer); clearInterval(tick); btn.classList.remove('on');
+    label.textContent=finished?'Replay':'Auto play'; btn.style.setProperty('--tp','0%'); if(finished)idx=0;
+  }
+  window.startTour=()=>start(0);
+  btn.addEventListener('click',()=>{ if(window.touring)stop(); else start(label.textContent==='Replay'?0:undefined) });
+  const userStop=()=>{ if(window.touring&&Date.now()>ignoreUntil-2400) stop() };
+  addEventListener('wheel',userStop,{passive:true});
+  addEventListener('touchstart',e=>{ if(window.touring&&!e.target.closest('#tourBtn,#musicBtn')) stop() },{passive:true});
+  addEventListener('keydown',e=>{ if(['ArrowDown','ArrowUp','PageDown','PageUp',' ','Home','End'].includes(e.key)) userStop() });
+  document.querySelectorAll('[data-t]').forEach(a=>a.addEventListener('click',()=>{ if(window.touring)stop() }));
+})();
 </script>
 </body>
 </html>
