@@ -6,8 +6,8 @@
 <title>Sheshadri & Neha · Wedding Invitation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Parisienne&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="img/red-p.jpg" media="(orientation: portrait)">
-<link rel="preload" as="image" href="img/red-l.jpg" media="(orientation: landscape)">
+<link rel="preload" as="image" href="img/maroon-p.jpg" media="(orientation: portrait)">
+<link rel="preload" as="image" href="img/maroon-l.jpg" media="(orientation: landscape)">
 <link rel="stylesheet" href="js/lenis.css">
 <style>
 :root{--red:#a8141f;--red-d:#7a0c15;--gold:#c9a24b;--gold-l:#ecd49a;--gold-d:#8f6a1f;--ink:#4a2a1e;--muted:#7d5c46;--bg:#5a0306}
@@ -21,19 +21,19 @@ body.locked{overflow:hidden;height:100vh}
 .sheet{position:relative;will-change:transform;transform-origin:50% 0;container-type:size;background-size:100% 100%;background-repeat:no-repeat;
   height:min(100svh, calc(100vw / var(--ar)));width:calc(min(100svh, calc(100vw / var(--ar))) * var(--ar));
   box-shadow:0 0 50px rgba(0,0,0,.45)}
-.cream{--ar:.5628;background-image:url(img/cream-p.jpg)}
-.red{--ar:.6667;background-image:url(img/red-p.jpg)}
-.red.alt{background-image:url(img/red-p.jpg)}
+.cream{--ar:.5628;background-image:url(img/ivory-p.jpg)}
+.red{--ar:.5628;background-image:url(img/maroon-p.jpg)}
+.red.alt{background-image:url(img/maroon-p.jpg)}
 .content{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
   top:var(--t);right:var(--s);bottom:var(--b);left:var(--s)}
-.cream .content{--t:15%;--b:19%;--s:13%}
-.red .content{--t:17%;--b:15%;--s:11%}
+.cream .content{--t:11%;--b:9%;--s:9%}
+.red .content{--t:15%;--b:12%;--s:9%}
 @media (orientation:landscape){
-  .cream{--ar:1.7768;background-image:url(img/cream-l.jpg)}
-  .red{--ar:1.7768;background-image:url(img/red-l.jpg)}
-  .red.alt{background-image:url(img/red-l2.jpg)}
-  .cream .content{--t:13%;--b:16%;--s:23%}
-  .red .content{--t:15%;--b:13%;--s:17%}
+  .cream{--ar:1.7768;background-image:url(img/ivory-l.jpg)}
+  .red{--ar:1.7768;background-image:url(img/maroon-l.jpg)}
+  .red.alt{background-image:url(img/maroon-l.jpg)}
+  .cream .content{--t:11%;--b:13%;--s:17%}
+  .red .content{--t:20%;--b:16%;--s:14%}
   main .content{transform:scale(1.15)}
 }
 
