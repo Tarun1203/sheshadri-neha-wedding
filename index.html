@@ -85,7 +85,7 @@ h2{font-family:'Great Vibes',cursive;font-weight:400;font-size:min(6.4cqh,13cqw)
 
 /* ---------- hero ---------- */
 .invoke{font-family:'Cormorant Garamond',serif;font-size:min(1.8cqh,3.7cqw);letter-spacing:.14em;color:var(--red)}
-.arch{height:27cqh;aspect-ratio:260/396;margin-top:1.4cqh}
+.arch{height:29cqh;aspect-ratio:272/406;margin-top:1.4cqh}
 .arch svg{height:100%;width:100%;display:block;filter:drop-shadow(0 1.2cqh 1.4cqh rgba(122,12,21,.3))}
 .names{margin-top:1.4cqh;line-height:1}
 .names .n{font-family:'Great Vibes',cursive;font-size:min(7cqh,15cqw);color:var(--red-d)}
@@ -97,7 +97,7 @@ h2{font-family:'Great Vibes',cursive;font-weight:400;font-size:min(6.4cqh,13cqw)
 
 /* ---------- couple ---------- */
 .couple{display:flex;align-items:center;justify-content:center;gap:min(2cqh,4cqw);margin-top:2.4cqh}
-.person .mini{height:17cqh;aspect-ratio:260/362;margin:0 auto}
+.person .mini{height:20cqh;aspect-ratio:272/406;margin:0 auto}
 .person .mini svg{width:100%;height:100%;display:block}
 .person .role{margin-top:1cqh;font-size:min(1.1cqh,2.4cqw);letter-spacing:.32em;text-transform:uppercase;color:var(--gold-l)}
 .person .pn{font-family:'Great Vibes',cursive;font-size:min(3.8cqh,8cqw);color:#fff3dc;line-height:1.1}
@@ -192,8 +192,6 @@ body.opened #fnav.hide{transform:translate(-50%,-160%)}
 .tilt{transform-style:preserve-3d;will-change:transform}
 .glare{position:absolute;inset:0;pointer-events:none;border-radius:inherit;opacity:0;transition:opacity .3s;background:radial-gradient(circle at var(--gx,50%) var(--gy,50%),rgba(255,245,215,.45),transparent 55%);mix-blend-mode:soft-light}
 .tilt:hover .glare{opacity:1}
-.gal .g{cursor:zoom-in;position:relative}
-.gal .g:hover svg{filter:drop-shadow(0 1.4cqh 1.6cqh rgba(122,12,21,.35))}
 
 /* ===== text generate words ===== */
 .w{display:inline-block;white-space:pre}
@@ -262,6 +260,19 @@ footer::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;b
   .ev .ic3{width:min(7.4cqh,14cqw)}
   .ev h3{font-size:min(3.4cqh,6cqw)}
 }
+
+/* ===== premium 3D coverflow gallery ===== */
+.cf{position:relative;width:100%;height:52cqh;margin-top:1.2cqh}
+.cf-stage{position:absolute;left:0;right:0;top:0;bottom:6.5cqh;perspective:1100px;touch-action:pan-y}
+.cf-item{position:absolute;left:50%;top:50%;height:42cqh;aspect-ratio:272/406;transform:translate(-50%,-50%);transition:transform .85s cubic-bezier(.2,.8,.2,1),opacity .85s,filter .85s;cursor:pointer;will-change:transform}
+.cf-item svg{width:100%;height:100%;display:block;filter:drop-shadow(0 1.4cqh 1.6cqh rgba(110,10,16,.38))}
+.cf-ctrl{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;gap:min(2cqh,4cqw)}
+.cf-ctrl button{width:min(4.6cqh,9.4cqw);height:min(4.6cqh,9.4cqw);border-radius:50%;border:1px solid var(--gold);background:linear-gradient(#b51c27,#6e0a10);color:var(--gold-l);font-size:min(2.6cqh,5.4cqw);line-height:1;cursor:pointer;box-shadow:0 .5cqh 1cqh rgba(110,10,16,.3)}
+.cf-dots{display:flex;gap:min(.8cqh,1.6cqw);align-items:center}
+.cf-dots i{width:min(.9cqh,1.9cqw);height:min(.9cqh,1.9cqw);border-radius:99px;background:rgba(168,20,31,.25);transition:all .4s;cursor:pointer}
+.cf-dots i.on{background:linear-gradient(90deg,#a8141f,#c9a24b);width:min(2.8cqh,5.8cqw)}
+.cf-hint{margin-top:1cqh;font-size:min(1.05cqh,2.2cqw);letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+@media (orientation:landscape){.cf{height:50cqh}.cf-item{height:40cqh}}
 </style>
 </head>
 <body class="locked">
@@ -465,7 +476,9 @@ footer::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;b
 <section class="page" id="gallery"><div class="sheet cream"><div class="content">
   <div class="eyebrow rv">Moments</div>
   <h2 class="rv">Our Gallery</h2>
-  <div class="gal rv"><div class="g" id="gal0"></div><div class="g" id="gal1"></div><div class="g" id="gal2"></div></div>
+  <div class="cf rv" id="cf"><div class="cf-stage" id="cfStage"></div>
+    <div class="cf-ctrl"><button class="cf-pv" aria-label="Previous photo">‹</button><div class="cf-dots" id="cfDots"></div><button class="cf-nx" aria-label="Next photo">›</button></div></div>
+  <div class="cf-hint rv">Swipe or tap a photo</div>
 </div></div></section>
 
 <!-- ============ 7. VENUE ============ -->
@@ -534,7 +547,8 @@ footer::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;b
 <script src="js/ScrollTrigger.min.js"></script>
 <script>
 /* Photos: replace null with image paths when available */
-const PHOTOS={hero:'img/photos/couple.jpg',groom:'img/photos/groom.jpg',bride:'img/photos/bride.jpg',gallery:['img/photos/gallery1.jpg','img/photos/gallery2.jpg','img/photos/gallery3.jpg']};
+const PHOTOS={hero:'img/photos/couple.jpg',groom:'img/photos/groom.jpg',bride:'img/photos/bride.jpg'};
+const GAL=[1,2,3,4,5,6,7,8].map(i=>({t:`img/photos/g${i}.jpg`,f:`img/photos/gf${i}.jpg`}));
 
 function archPath(i){
   const B=352-i,L=10+i,R=250-i;
@@ -545,27 +559,34 @@ let uid=0;
 function archSVG(o){
   const id='a'+(uid++);
   const inner=o.photo
-    ?`<image href="${o.photo}" width="260" height="360" preserveAspectRatio="xMidYMid slice" clip-path="url(#c${id})"/>`
+    ?`<g clip-path="url(#c${id})"><rect width="260" height="360" fill="#5a0a10"/><image href="${o.photo}" x="0" y="0" width="260" height="360" preserveAspectRatio="xMidYMid slice"/><rect width="260" height="360" fill="url(#v${id})"/></g>`
     :`<g clip-path="url(#c${id})"><rect width="260" height="360" fill="url(#r${id})"/>
-       <text x="130" y="${o.ty||225}" text-anchor="middle" font-family="Great Vibes" font-size="${o.fs||92}" fill="#ecd49a" ${o.tl?`textLength="${o.tl}" lengthAdjust="spacingAndGlyphs"`:''}>${o.text}</text>
-       ${o.sub?`<text x="130" y="275" text-anchor="middle" font-family="Jost" font-size="11" letter-spacing="5" fill="#ecd49a" fill-opacity=".85">${o.sub}</text>`:''}</g>`;
-  return `<svg viewBox="0 ${o.big?-34:0} 260 ${o.big?396:362}" aria-hidden="true">
-   <defs><clipPath id="c${id}"><path d="${archPath(15)}"/></clipPath>
-   <radialGradient id="r${id}" cx=".5" cy=".38" r=".7"><stop offset="0" stop-color="#c8303a"/><stop offset="1" stop-color="#6e0a12"/></radialGradient></defs>
+       <text x="130" y="${o.ty||225}" text-anchor="middle" font-family="Great Vibes" font-size="${o.fs||92}" fill="#ecd49a">${o.text||''}</text></g>`;
+  return `<svg viewBox="-6 -40 272 406" aria-hidden="true">
+   <defs><clipPath id="c${id}"><path d="${archPath(16)}"/></clipPath>
+   <radialGradient id="r${id}" cx=".5" cy=".38" r=".7"><stop offset="0" stop-color="#c8303a"/><stop offset="1" stop-color="#6e0a12"/></radialGradient>
+   <radialGradient id="v${id}" cx=".5" cy=".45" r=".72"><stop offset=".55" stop-color="#2a0004" stop-opacity="0"/><stop offset="1" stop-color="#2a0004" stop-opacity=".42"/></radialGradient></defs>
+   <path d="${archPath(-3)}" fill="none" stroke="#e9cf8f" stroke-opacity=".55" stroke-width="1.2"/>
    <path d="${archPath(0)}" fill="url(#gGold)"/>
-   <path d="${archPath(10)}" fill="#7a0c15"/>
-   <path d="${archPath(10)}" fill="none" stroke="#fff3d6" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="0 6"/>
+   <path d="${archPath(1.6)}" fill="none" stroke="#fff6d2" stroke-opacity=".75" stroke-width="1.1"/>
+   <path d="${archPath(8.6)}" fill="none" stroke="#6b4510" stroke-opacity=".8" stroke-width="1"/>
+   <path d="${archPath(10)}" fill="#6e0a12"/>
+   <path d="${archPath(12.8)}" fill="none" stroke="#fff3d6" stroke-width="3" stroke-linecap="round" stroke-dasharray="0 7.2"/>
    ${inner}
-   <path d="${archPath(15)}" fill="none" stroke="url(#gGold)" stroke-width="1.6"/>
-   <path d="${archPath(22)}" fill="none" stroke="#ecd49a" stroke-opacity=".5" stroke-width=".8"/>
-   <g fill="url(#gGold)"><rect x="0" y="336" width="34" height="18" rx="2"/><rect x="226" y="336" width="34" height="18" rx="2"/></g>
-   ${o.big?`<g transform="translate(108 -32)" style="color:#c9a24b"><svg width="44" height="46" viewBox="0 0 60 64"><use href="#kalasha"/></svg></g>`:''}
+   <path d="${archPath(16)}" fill="none" stroke="url(#gGold)" stroke-width="2.2"/>
+   <path d="${archPath(22)}" fill="none" stroke="#fff3d6" stroke-opacity=".45" stroke-width=".8"/>
+   <g><circle cx="10" cy="150" r="9" fill="url(#gGold)"/><circle cx="250" cy="150" r="9" fill="url(#gGold)"/>
+      <circle cx="10" cy="150" r="3.6" fill="#a8141f"/><circle cx="250" cy="150" r="3.6" fill="#a8141f"/>
+      <path d="M10 141c-7-6-7-16 0-20M250 141c7-6 7-16 0-20" stroke="url(#gGold)" stroke-width="2.4" fill="none" stroke-linecap="round"/></g>
+   <g fill="url(#gGold)"><rect x="-4" y="334" width="38" height="22" rx="2"/><rect x="226" y="334" width="38" height="22" rx="2"/>
+      <rect x="-6" y="352" width="272" height="9" rx="2"/></g>
+   <rect x="-6" y="352" width="272" height="2" fill="#fff6d2" opacity=".6"/>
+   <g transform="translate(104 -42)"><svg width="52" height="52" viewBox="0 0 100 100"><use href="#i-kal"/></svg></g>
   </svg>`;
 }
-document.getElementById('heroArch').innerHTML=archSVG({big:true,photo:PHOTOS.hero,text:'S&amp;N',sub:'THE WEDDING',fs:78,tl:160,ty:215});
-document.getElementById('groomArch').innerHTML=archSVG({photo:PHOTOS.groom,text:'S',fs:110,ty:240});
-document.getElementById('brideArch').innerHTML=archSVG({photo:PHOTOS.bride,text:'N',fs:110,ty:240});
-for(let i=0;i<3;i++)document.getElementById('gal'+i).innerHTML=archSVG({photo:PHOTOS.gallery[i],text:'♥',fs:70,ty:220});
+document.getElementById('heroArch').innerHTML=archSVG({photo:PHOTOS.hero});
+document.getElementById('groomArch').innerHTML=archSVG({photo:PHOTOS.groom});
+document.getElementById('brideArch').innerHTML=archSVG({photo:PHOTOS.bride});
 
 /* Opening */
 const env=document.getElementById('env');
@@ -665,7 +686,7 @@ $('#toTop').addEventListener('click',()=>goTo('home'));
 
 // 3D tilt (mouse/trackpad devices)
 if(matchMedia('(hover:hover)').matches && window.gsap){
-  $$('.tilt, .gal .g, .arch, .person .mini').forEach(el=>{
+  $$('.tilt, .arch, .person .mini').forEach(el=>{
     if(getComputedStyle(el).position==='static')el.style.position='relative';
     const gl=document.createElement('div');gl.className='glare';el.appendChild(gl);el.classList.add('tilt');
     el.addEventListener('pointermove',e=>{const r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
@@ -682,12 +703,33 @@ const shareText="You're invited to the wedding of Sheshadri & Neha 💐\nDevatha
 $('#waTile').href='https://wa.me/?text='+encodeURIComponent(shareText);
 
 // Lightbox gallery
-const LB=['img/photos/full1.jpg','img/photos/full2.jpg','img/photos/full3.jpg','img/photos/full4.jpg'];
+const LB=['img/photos/full1.jpg',...GAL.map(g=>g.f)];
 const lb=$('#lb'), lbImg=$('#lb img'); let li=0;
 function lbShow(i){li=(i+LB.length)%LB.length;lbImg.src=LB[li];$('#lb .cnt').textContent=(li+1)+' / '+LB.length}
 function lbOpen(i){lbShow(i);lb.classList.add('show');lb.setAttribute('aria-hidden','false');if(lenis)lenis.stop()}
 function lbClose(){lb.classList.remove('show');lb.setAttribute('aria-hidden','true');if(lenis)lenis.start()}
-['gal0','gal1','gal2'].forEach((id,i)=>document.getElementById(id).addEventListener('click',()=>lbOpen(i+1)));
+
+/* coverflow */
+const stage=document.getElementById('cfStage'), dotsEl=document.getElementById('cfDots'); let cur=0, auto=null, pauseUntil=0, swiped=false;
+const cfItems=GAL.map((g,i)=>{const d=document.createElement('div');d.className='cf-item';d.innerHTML=archSVG({photo:g.t});stage.appendChild(d);
+  d.addEventListener('click',()=>{if(swiped){swiped=false;return}if(i===cur)lbOpen(i+1);else{hold();go(i)}});return d});
+dotsEl.innerHTML=GAL.map(()=>'<i></i>').join('');const dots=[...dotsEl.children];dots.forEach((dt,i)=>dt.addEventListener('click',()=>go(i)));
+function layout(){const W=stage.offsetWidth,n=cfItems.length,land=innerWidth>innerHeight;
+  cfItems.forEach((el,i)=>{let d=((i-cur)%n+n)%n;if(d>n/2)d-=n;const a=Math.abs(d);let x=0,sc=1,ry=0,op=1,z=10;
+    if(a===0){}
+    else if(a===1){x=d*W*(land?.24:.33);sc=.74;ry=-d*30;op=.9;z=8}
+    else if(a===2){x=d*W*(land?.42:.42);sc=.56;ry=-d*38;op=land?.5:0;z=6}
+    else{x=d*W*.5;sc=.4;op=0;z=1}
+    el.style.transform=`translate(-50%,-50%) translateX(${x}px) rotateY(${ry}deg) scale(${sc})`;el.style.opacity=op;el.style.zIndex=z;
+    el.style.pointerEvents=op?'auto':'none';el.style.filter=a?'brightness(.9) saturate(.9)':'none'});
+  dots.forEach((dt,i)=>dt.classList.toggle('on',i===cur))}
+function go(i){cur=(i+cfItems.length)%cfItems.length;layout()}
+function hold(){pauseUntil=Date.now()+9000}
+document.querySelector('.cf-pv').onclick=()=>{hold();go(cur-1)};document.querySelector('.cf-nx').onclick=()=>{hold();go(cur+1)};
+let px=null;stage.addEventListener('pointerdown',e=>{px=e.clientX;hold()});
+stage.addEventListener('pointerup',e=>{if(px===null)return;const dx=e.clientX-px;swiped=Math.abs(dx)>40;if(swiped){go(cur+(dx<0?1:-1))}px=null});
+new IntersectionObserver(es=>es.forEach(e=>{clearInterval(auto);if(e.isIntersecting)auto=setInterval(()=>{if(Date.now()>pauseUntil&&!lb.classList.contains('show'))go(cur+1)},4200)}),{threshold:.5}).observe(document.getElementById('gallery'));
+addEventListener('resize',layout);layout();
 document.getElementById('heroArch').style.cursor='zoom-in';
 document.getElementById('heroArch').addEventListener('click',()=>lbOpen(0));
 $('#lb .x').onclick=lbClose; $('#lb .pv').onclick=e=>{e.stopPropagation();lbShow(li-1)}; $('#lb .nx').onclick=e=>{e.stopPropagation();lbShow(li+1)};
