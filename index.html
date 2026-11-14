@@ -6,7 +6,7 @@
 <title>Sheshadri & Neha · Wedding Invitation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Parisienne&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="img/maroon-p.jpg" media="(orientation: portrait)">
+<link rel="preload" as="image" href="img/temple-p.jpg">
 <link rel="preload" as="image" href="img/maroon-l.jpg" media="(orientation: landscape)">
 <link rel="stylesheet" href="js/lenis.css">
 <style>
@@ -273,6 +273,14 @@ footer::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;b
 .cf-dots i.on{background:linear-gradient(90deg,#a8141f,#c9a24b);width:min(2.8cqh,5.8cqw)}
 .cf-hint{margin-top:1cqh;font-size:min(1.05cqh,2.2cqw);letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
 @media (orientation:landscape){.cf{height:50cqh}.cf-item{height:40cqh}}
+
+/* ===== opening: temple arch card ===== */
+.temple{--ar:.5628;background-image:url(img/temple-p.jpg)}
+.temple .content{--t:21%;--b:13%;--s:13%}
+#env .to{color:var(--red);opacity:1}
+#env .who{color:var(--red-d)}
+#env .tap{color:var(--red-d);opacity:.8}
+@media (orientation:landscape){#env{background:url(img/maroon-l.jpg) center/cover}#env .sheet{box-shadow:0 30px 80px rgba(0,0,0,.6)}}
 </style>
 </head>
 <body class="locked">
@@ -383,10 +391,10 @@ footer::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;b
 
 <!-- ============ 1. OPENING ============ -->
 <div id="env" class="page">
-  <div class="sheet red alt">
+  <div class="sheet temple">
     <div class="content">
       <div class="to">You're invited to the wedding of</div>
-      <div class="who">Sheshadri &amp; Neha</div>
+      <div class="who">Sheshadri<br><span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.5em">&amp;</span> Neha</div>
       <div class="envelope">
         <div class="env-back"></div>
         <div class="card"><div class="c1">Save the date</div><div class="c2">Sheshadri &amp; Neha</div><div class="c3">12 · 13 December 2026</div></div>
