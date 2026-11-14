@@ -281,6 +281,38 @@ footer::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;b
 #env .who{color:var(--red-d)}
 #env .tap{color:var(--red-d);opacity:.8}
 @media (orientation:landscape){#env{background:url(img/maroon-l.jpg) center/cover}#env .sheet{box-shadow:0 30px 80px rgba(0,0,0,.6)}}
+
+/* ===== opening: rolling scroll ===== */
+.scroll{position:relative;width:min(40cqh,66cqw);margin-top:3.4cqh;display:flex;flex-direction:column;align-items:center;filter:drop-shadow(0 1.4cqh 1.6cqh rgba(80,20,0,.35))}
+.roller{position:relative;z-index:3;width:100%;height:min(3.4cqh,6.6cqw);border-radius:99px;overflow:visible;
+  background:linear-gradient(180deg,#4a1406 0%,#a5642a 22%,#f3d58a 42%,#e2b25c 52%,#9a5a22 74%,#3e1004 100%)}
+.roller i{position:absolute;inset:0;border-radius:inherit;opacity:.35;background:repeating-linear-gradient(180deg,rgba(255,240,200,.0) 0 3px,rgba(60,20,0,.55) 3px 4px);background-size:100% 8px}
+.roller::before,.roller::after{content:"";position:absolute;top:50%;width:min(2.4cqh,4.6cqw);height:min(5cqh,9.6cqw);transform:translateY(-50%);border-radius:45%;
+  background:radial-gradient(circle at 35% 28%,#fff3c8,#d8ad55 45%,#8a5a14 80%);box-shadow:0 .3cqh .6cqh rgba(0,0,0,.35)}
+.roller::before{left:min(-2cqh,-3.8cqw)}.roller::after{right:min(-2cqh,-3.8cqw)}
+.paper{position:relative;z-index:2;width:90%;height:min(1.6cqh,3cqw);overflow:hidden;margin:-.4cqh 0;
+  background:radial-gradient(ellipse at 50% 50%,#fffaf0,#f6e7c6 70%,#ead39f),#f6e7c6;
+  border-left:1px solid #d9b46a;border-right:1px solid #d9b46a;
+  box-shadow:inset 0 1.4cqh 1.4cqh -1cqh rgba(110,60,10,.45),inset 0 -1.4cqh 1.4cqh -1cqh rgba(110,60,10,.45);
+  transition:height 1.7s cubic-bezier(.65,0,.3,1)}
+.pin{height:min(34cqh,62cqw);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2cqh 2cqh;opacity:0;transform:translateY(-1cqh);transition:opacity .9s ease .7s,transform .9s ease .7s}
+.pin .s1{font-family:'Cormorant Garamond',serif;font-size:min(1.7cqh,3.4cqw);letter-spacing:.14em;color:var(--red)}
+.pin .sorn{width:min(22cqh,44cqw);height:min(3cqh,6cqw);margin:.6cqh 0 1cqh}
+.pin .s2{font-family:'Parisienne',cursive;font-size:min(5.4cqh,11cqw);line-height:1.05;color:var(--red-d)}
+.pin .s3{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:min(2.4cqh,5cqw);color:var(--gold-d)}
+.pin .s4{margin-top:1.4cqh;font-family:'Cormorant Garamond',serif;font-size:min(2cqh,4.2cqw);letter-spacing:.08em;color:var(--ink)}
+.pin .s5{margin-top:.5cqh;font-size:min(1.05cqh,2.2cqw);letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.ribbon{position:absolute;z-index:4;left:50%;top:-1cqh;bottom:-1cqh;width:min(3.2cqh,6.4cqw);transform:translateX(-50%);
+  background:linear-gradient(90deg,#7a0c15,#c8323a 40%,#e0525a 50%,#a8141f 70%,#6e0a10);box-shadow:0 0 .6cqh rgba(0,0,0,.3);transition:opacity .4s,transform .5s}
+#env .scroll .seal{top:50%;z-index:5}
+#env.open .ribbon{opacity:0;transform:translateX(-50%) scaleY(1.4)}
+#env.open .scroll .seal{opacity:0;transform:translate(-50%,-50%) scale(1.3);transition:opacity .4s,transform .4s;animation:none}
+#env.open .paper{height:min(34cqh,62cqw)}
+#env.open .pin{opacity:1;transform:none}
+#env.open .roller.bot i{animation:roll 1.7s cubic-bezier(.65,0,.3,1)}
+#env.open .roller.top i{animation:roll 1.7s cubic-bezier(.65,0,.3,1) reverse}
+@keyframes roll{from{background-position:0 0}to{background-position:0 160px}}
+#env.open .tap{opacity:0;transition:opacity .4s}
 </style>
 </head>
 <body class="locked">
@@ -395,17 +427,20 @@ footer::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;b
     <div class="content">
       <div class="to">You're invited to the wedding of</div>
       <div class="who">Sheshadri<br><span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.5em">&amp;</span> Neha</div>
-      <div class="envelope">
-        <div class="env-back"></div>
-        <div class="card"><div class="c1">Save the date</div><div class="c2">Sheshadri &amp; Neha</div><div class="c3">12 · 13 December 2026</div></div>
-        <div class="env-front"><svg viewBox="0 0 145 100" preserveAspectRatio="none">
-          <path d="M0 0L72.5 56 145 0v100H0z" fill="#a8141f"/><path d="M0 100L72.5 50 145 100z" fill="#b51a25"/>
-          <path d="M0 100L72.5 50 145 100" fill="none" stroke="#c9a24b" stroke-width=".7"/></svg></div>
-        <div class="flap"><svg viewBox="0 0 145 58" preserveAspectRatio="none">
-          <path d="M0 0h145L72.5 58z" fill="#c01f2b"/><path d="M0 0L72.5 58 145 0" fill="none" stroke="#c9a24b" stroke-width=".7"/></svg></div>
+      <div class="scroll" id="scroll">
+        <div class="roller top"><i></i></div>
+        <div class="paper"><div class="pin">
+          <div class="s1">॥ Shubha Vivaha ॥</div>
+          <svg class="sorn" viewBox="0 0 220 30"><use href="#orn"/></svg>
+          <div class="s2">Sheshadri</div><div class="s3">&amp;</div><div class="s2">Neha</div>
+          <div class="s4">12 · 13 December 2026</div>
+          <div class="s5">Sai Gokula Kalyana Mantapa · Tumkur</div>
+        </div></div>
+        <div class="roller bot"><i></i></div>
+        <div class="ribbon"></div>
         <button class="seal" id="seal" aria-label="Open invitation"><svg viewBox="0 0 60 64"><use href="#kalasha"/></svg></button>
       </div>
-      <div class="tap">Tap the seal to open</div>
+      <div class="tap">Tap the seal to unroll</div>
     </div>
   </div>
 </div>
@@ -600,8 +635,8 @@ document.getElementById('brideArch').innerHTML=archSVG({photo:PHOTOS.bride});
 const env=document.getElementById('env');
 document.getElementById('seal').addEventListener('click',()=>{
   env.classList.add('open');
-  setTimeout(()=>burst(30),900);
-  setTimeout(()=>{env.classList.add('done');document.body.classList.remove('locked');document.body.classList.add('opened');if(window.lenis)lenis.start();if(window.ScrollTrigger)ScrollTrigger.refresh();},2500);
+  setTimeout(()=>burst(30),1500);
+  setTimeout(()=>{env.classList.add('done');document.body.classList.remove('locked');document.body.classList.add('opened');if(window.lenis)lenis.start();if(window.ScrollTrigger)ScrollTrigger.refresh();},3600);
 });
 const cols=['#e8962a','#f2b14a','#c8323a','#f6c86b','#fff3d6'];
 function petal(){
@@ -637,7 +672,7 @@ document.getElementById('copyBtn').addEventListener('click',async()=>{
 const bgm=document.getElementById('bgm'),mBtn=document.getElementById('musicBtn');let wantMusic=true;
 function fadeTo(v,ms){const s=bgm.volume,t0=performance.now();(function f(n){const k=Math.min(1,(n-t0)/ms);bgm.volume=s+(v-s)*k;if(k<1)requestAnimationFrame(f)})(t0)}
 function playMusic(){bgm.volume=0;const p=bgm.play();if(p)p.then(()=>{fadeTo(.6,2500);mBtn.classList.remove('muted')}).catch(()=>mBtn.classList.add('muted'))}
-document.getElementById('seal').addEventListener('click',()=>{playMusic();setTimeout(()=>mBtn.classList.add('show'),2500)});
+document.getElementById('seal').addEventListener('click',()=>{playMusic();setTimeout(()=>mBtn.classList.add('show'),3600)});
 mBtn.addEventListener('click',()=>{if(bgm.paused){wantMusic=true;playMusic()}else{wantMusic=false;bgm.pause();mBtn.classList.add('muted')}});
 document.addEventListener('visibilitychange',()=>{if(document.hidden){bgm.pause()}else if(wantMusic&&env.classList.contains('done')){bgm.play().catch(()=>{})}});
 
