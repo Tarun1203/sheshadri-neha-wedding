@@ -313,6 +313,31 @@ footer::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;b
 #env.open .roller.top i{animation:roll 1.7s cubic-bezier(.65,0,.3,1) reverse}
 @keyframes roll{from{background-position:0 0}to{background-position:0 160px}}
 #env.open .tap{opacity:0;transition:opacity .4s}
+
+/* ===== 3D satin ribbon bow ===== */
+.ribbon{background:none!important;box-shadow:none!important;width:min(3.6cqh,7.2cqw)!important;top:-1.6cqh!important;bottom:-1.6cqh!important}
+.ribbon i{position:absolute;left:0;right:0;background:linear-gradient(90deg,#5e040b,#b51626 30%,#ff6b74 50%,#c8182a 68%,#5e040b);box-shadow:0 0 .8cqh rgba(60,0,5,.4);transition:transform .9s cubic-bezier(.6,0,.3,1),opacity .9s}
+.ribbon i::after{content:"";position:absolute;inset:0 22%;border-left:1px solid rgba(233,207,143,.75);border-right:1px solid rgba(233,207,143,.75)}
+.ribbon .rb-t{top:0;height:50%}.ribbon .rb-b{bottom:0;height:50%}
+.bow{position:absolute;z-index:6;left:50%;top:50%;width:min(19cqh,38cqw);aspect-ratio:200/150;transform:translate(-50%,-52%);border:none;background:none;padding:0;cursor:pointer;animation:bowPulse 2.2s ease-in-out infinite;-webkit-tap-highlight-color:transparent}
+.bow svg{width:100%;height:100%;display:block;overflow:visible}
+.bow .loop,.bow .tail,.bow .knot{transform-box:fill-box;transition:transform 1s cubic-bezier(.5,0,.2,1),opacity .9s ease}
+.bow .loop.l{transform-origin:100% 80%}.bow .loop.r{transform-origin:0% 80%}
+.bow .tail.l{transform-origin:100% 0}.bow .tail.r{transform-origin:0 0}
+.bow .knot{transform-origin:50% 50%}
+.bow:hover .loop.l{transform:rotate(-6deg)}.bow:hover .loop.r{transform:rotate(6deg)}
+@keyframes bowPulse{0%,100%{transform:translate(-50%,-52%) scale(1)}50%{transform:translate(-50%,-52%) scale(1.06)}}
+#env.open .bow{animation:none;pointer-events:none}
+#env.open .bow .loop.l{transform:translate(-60%,-30%) rotate(-70deg) scale(.6);opacity:0}
+#env.open .bow .loop.r{transform:translate(60%,-30%) rotate(70deg) scale(.6);opacity:0}
+#env.open .bow .tail.l{transform:translate(-40%,60%) rotate(40deg);opacity:0}
+#env.open .bow .tail.r{transform:translate(40%,60%) rotate(-40deg);opacity:0}
+#env.open .bow .knot{transform:scale(0);opacity:0;transition-delay:.15s}
+#env.open .ribbon{opacity:1!important;transform:translateX(-50%)!important}
+#env.open .ribbon .rb-t{transform:translateY(-140%) rotate(-8deg);opacity:0;transition-delay:.25s}
+#env.open .ribbon .rb-b{transform:translateY(140%) rotate(8deg);opacity:0;transition-delay:.25s}
+#env.open .paper{transition-delay:.55s}
+#env.open .roller.bot i,#env.open .roller.top i{animation-delay:.55s}
 </style>
 </head>
 <body class="locked">
@@ -437,10 +462,35 @@ footer::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;b
           <div class="s5">Sai Gokula Kalyana Mantapa · Tumkur</div>
         </div></div>
         <div class="roller bot"><i></i></div>
-        <div class="ribbon"></div>
-        <button class="seal" id="seal" aria-label="Open invitation"><svg viewBox="0 0 60 64"><use href="#kalasha"/></svg></button>
+        <div class="ribbon"><i class="rb-t"></i><i class="rb-b"></i></div>
+        <button class="bow" id="seal" aria-label="Untie the ribbon to open">
+          <svg viewBox="0 0 200 150" aria-hidden="true">
+            <defs>
+              <linearGradient id="sat1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff6b74"/><stop offset=".35" stop-color="#d81f2f"/><stop offset=".7" stop-color="#9c0c18"/><stop offset="1" stop-color="#5e040b"/></linearGradient>
+              <linearGradient id="sat2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7a0612"/><stop offset=".5" stop-color="#c8182a"/><stop offset="1" stop-color="#6a0410"/></linearGradient>
+              <radialGradient id="satK" cx=".4" cy=".3" r=".8"><stop offset="0" stop-color="#ff8a90"/><stop offset=".45" stop-color="#d01c2c"/><stop offset="1" stop-color="#700611"/></radialGradient>
+              <linearGradient id="satHi" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+              <filter id="bowSh" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#3a0005" flood-opacity=".45"/></filter>
+            </defs>
+            <g filter="url(#bowSh)">
+              <g class="tail l"><path d="M92 82 L60 140 L74 134 L80 148 L104 88z" fill="url(#sat2)"/><path d="M92 82 L66 132" stroke="#ff9aa0" stroke-opacity=".5" stroke-width="2"/></g>
+              <g class="tail r"><path d="M108 82 L140 140 L126 134 L120 148 L96 88z" fill="url(#sat2)"/><path d="M108 82 L134 132" stroke="#ff9aa0" stroke-opacity=".5" stroke-width="2"/></g>
+              <g class="loop l"><path d="M100 72 C70 30 18 22 12 52 C6 84 52 96 100 78z" fill="url(#sat1)"/>
+                <path d="M100 74 C76 52 44 48 36 60 C46 70 72 76 100 76z" fill="#5e040b" opacity=".55"/>
+                <path d="M88 58 C68 38 34 32 24 46" stroke="url(#satHi)" stroke-width="7" fill="none" stroke-linecap="round" opacity=".8"/>
+                <path d="M100 72 C70 30 18 22 12 52 C6 84 52 96 100 78" fill="none" stroke="#e9cf8f" stroke-width="1.6" stroke-opacity=".9"/></g>
+              <g class="loop r"><path d="M100 72 C130 30 182 22 188 52 C194 84 148 96 100 78z" fill="url(#sat1)"/>
+                <path d="M100 74 C124 52 156 48 164 60 C154 70 128 76 100 76z" fill="#5e040b" opacity=".55"/>
+                <path d="M112 58 C132 38 166 32 176 46" stroke="url(#satHi)" stroke-width="7" fill="none" stroke-linecap="round" opacity=".8"/>
+                <path d="M100 72 C130 30 182 22 188 52 C194 84 148 96 100 78" fill="none" stroke="#e9cf8f" stroke-width="1.6" stroke-opacity=".9"/></g>
+              <g class="knot"><rect x="84" y="58" width="32" height="34" rx="11" fill="url(#satK)"/>
+                <rect x="84" y="58" width="32" height="34" rx="11" fill="none" stroke="#e9cf8f" stroke-width="1.6"/>
+                <ellipse cx="96" cy="66" rx="8" ry="4" fill="#fff" opacity=".55"/></g>
+            </g>
+          </svg>
+        </button>
       </div>
-      <div class="tap">Tap the seal to unroll</div>
+      <div class="tap">Tap the ribbon to open</div>
     </div>
   </div>
 </div>
@@ -635,8 +685,8 @@ document.getElementById('brideArch').innerHTML=archSVG({photo:PHOTOS.bride});
 const env=document.getElementById('env');
 document.getElementById('seal').addEventListener('click',()=>{
   env.classList.add('open');
-  setTimeout(()=>burst(30),1500);
-  setTimeout(()=>{env.classList.add('done');document.body.classList.remove('locked');document.body.classList.add('opened');if(window.lenis)lenis.start();if(window.ScrollTrigger)ScrollTrigger.refresh();},3600);
+  setTimeout(()=>burst(30),2000);
+  setTimeout(()=>{env.classList.add('done');document.body.classList.remove('locked');document.body.classList.add('opened');if(window.lenis)lenis.start();if(window.ScrollTrigger)ScrollTrigger.refresh();},4100);
 });
 const cols=['#e8962a','#f2b14a','#c8323a','#f6c86b','#fff3d6'];
 function petal(){
